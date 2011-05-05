@@ -19,6 +19,10 @@ exports.dbs_path = path.join(path.dirname(__dirname), "dbs");
 
 exports.debug_output = true;
 
+exports.host = "127.0.0.1";
+
+exports.port = 51432;
+
 exports.servers = {
 };
 

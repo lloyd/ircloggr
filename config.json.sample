@@ -8,5 +8,7 @@
         "irc.freenode.net": [
             "ircloggr"
         ]
-    }
+    },
+    "host": "127.0.0.1",
+    "port": 51432
 }

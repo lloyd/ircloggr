@@ -18,9 +18,6 @@ httputils = require('./httputils.js'),
       irc = require('./irc.js'),
    config = require('./config.js');
 
-var PRIMARY_HOST = "127.0.0.1";
-var PRIMARY_PORT = 51432;
-
 // XXX: command line switch handling
 
 // parse config file
@@ -90,5 +87,5 @@ function runWSAPI() {
                 httputils.fourOhFour(response, "no such function: " + urlpath + "\n");
             }
         })
-        .listen(PRIMARY_PORT, PRIMARY_HOST);
+        .listen(config.port, config.host);
 }
