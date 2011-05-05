@@ -6,8 +6,22 @@ cache headers on api responses, and of course, you can configure all
 that.  The goal is to push sqlite as far as it can go to keep deployment
 simple.  We'll see.
 
+JSON Responses are described with [orderly](http://orderly-json.org).
 
-**`/utterances/<host>/<room>?num=<number>&before=<id>`**
+`/logs`
+
+Get a list of all rooms that have logs available.
+
+Response:
+
+    array {
+      object {
+        string host;
+        string room;
+      }
+    };
+
+`/utterances/<host>/<room>?num=<number>&before=<id>`
 
 Get the latest `num` irc messages.  default 30, max 100.  if `before`
 is provided, they will be utterances before that with the specified
@@ -24,7 +38,7 @@ Response:
       }
     };
 
-**`/context/<host>/<room>/<id>?num=<number>`**
+`/context/<host>/<room>/<id>?num=<number>`
 
 
 Get an uttrance and its context: <number> before it, and <number>
@@ -35,7 +49,7 @@ Response:
 
     same as `/utterances/' response
 
-**`/search/<host>/<room>/<text>?num=<number>&before=<id>`**
+`/search/<host>/<room>/<text>?num=<number>&before=<id>`
 
 Search utterances, returning a max of `<number>` (default 30), occuring before utterance with specified `<id>` (default, most recent utterance).
 
