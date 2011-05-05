@@ -81,10 +81,16 @@ function runWSAPI() {
         }))
         .use(function(request, response, serveFile) {
             var urlpath = url.parse(request.url).pathname;
-            if (wsapi[urlpath]) {
-                wsapi[urlpath](request, response);
-            } else {
-                httputils.fourOhFour(response, "no such function: " + urlpath + "\n");
+            // break pathname up by '/'
+            try {
+                var args = urlpath.substr(1).split('/');
+                if (wsapi[args[0]]) {
+                    wsapi[urlpath](request, response);
+                } else {
+                    httputils.fourOhFour(response, "no such function: " + urlpath + "\n");
+                }
+            } catch(e) {
+                httputils.badRequest(response, e.toString());
             }
         })
         .listen(config.port, config.host);

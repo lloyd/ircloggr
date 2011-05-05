@@ -9,6 +9,7 @@ const     db = require('./db.js'),
          url = require('url'),
    httputils = require('./httputils.js');
 
-exports.test = function(req, resp) {
+exports.utterances = function(req, resp) {
+
     httputils.jsonResponse(resp, true);
 };
