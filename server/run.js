@@ -20,28 +20,29 @@ httputils = require('./httputils.js'),
 var PRIMARY_HOST = "127.0.0.1";
 var PRIMARY_PORT = 51432;
 
-var server = connect.createServer()
-    .use(connect.favicon())
-    .use(connect.logger({
-        format: ":status :method :remote-addr :response-time :url",
-        stream: fs.createWriteStream(path.join(__dirname, "server.log"))
-    }))
-    .use(function(request, response, serveFile) {
-        var urlpath = url.parse(request.url).pathname;
-        if (wsapi[urlpath]) {
-            wsapi[urlpath](request, response);
-        } else {
-            httputils.fourOhFour(response, "no such function: " + urlpath + "\n");
-        }
+// first set up irc bot
+irc.listen("irc.mozilla.org", "#ircloggr", function(x) {
+    irc.listen("irc.mozilla.org", "#ircloggr2", function(x) {
+        runWSAPI();
     });
+});
 
-exports.setup = function(server) {
-  var week = (7 * 24 * 60 * 60 * 1000);
-  server.use(sessions({
-      secret: COOKIE_SECRET,
-      session_key: "eyedeeme_state",
-      path: '/'
-  }));
+var server = undefined;
+
+function runWSAPI() {
+    server = connect.createServer()
+        .use(connect.favicon())
+        .use(connect.logger({
+            format: ":status :method :remote-addr :response-time :url",
+            stream: fs.createWriteStream(path.join(__dirname, "server.log"))
+        }))
+        .use(function(request, response, serveFile) {
+            var urlpath = url.parse(request.url).pathname;
+            if (wsapi[urlpath]) {
+                wsapi[urlpath](request, response);
+            } else {
+                httputils.fourOhFour(response, "no such function: " + urlpath + "\n");
+            }
+        })
+        .listen(PRIMARY_PORT, PRIMARY_HOST);
 }
-
-server.listen(PRIMARY_PORT, PRIMARY_HOST);
