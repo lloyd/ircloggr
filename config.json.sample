@@ -1,0 +1,12 @@
+{
+    "bot_name": "ircloggr",
+    "servers": {
+        "irc.mozilla.org": [
+            "#ircloggr",
+            "ircloggr2"
+        ],
+        "irc.freenode.net": [
+            "ircloggr"
+        ]
+    }
+}
