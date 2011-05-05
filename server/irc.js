@@ -5,51 +5,48 @@
  * See LICENSE file for licensing information.
  */
 
-const irc = require('irc');
-
-exports.my_name = "ircloggr";
+const irc = require('irc'),
+       db = require("./db.js"),
+   config = require("./config.js");
 
 // a mapping of servernames to irc client handles
 var clients = {
 };
 
 function createBot(host, room, cb) {
-    var bot = new irc.Client(host, exports.my_name, {debug: true});
-    console.log("created bot");
+    var bot = new irc.Client(host, config.bot_name, {debug: config.debug_output});
     bot.addListener('error', function(message) {
-        console.log("error connecting to " + host + " " + room);
+        if (config.debug_output) console.log("error connecting to " + host + " " + room);
         cb(undefined);
     });
     bot.addListener('message', function (from, to, message) {
-        console.log(from + ' => ' + to + ': ' + message);
+        db.log_message(host, to, from, message);
     });
     bot.addListener('connect', function () {
-        console.log("connected to " + host + " " + room);
+        if (config.debug_output) console.log("connected to " + host);
     });
     bot.addListener('registered', function () {
-        console.log("registered on " + host + " " + room);
+        if (config.debug_output) console.log("registered on " + host + " " + room);
         cb(bot);
     });
     bot.addListener('pm', function(nick, message) {
-        console.log('Got private message from ' + nick + ': ' + message);
+        if (config.debug_output) console.log('Got private message from ' + nick + ': ' + message);
     });
     bot.addListener('join', function(channel, who) {
-        console.log(who + ' has joined ' + channel);
+        if (config.debug_output) console.log(who + ' has joined ' + channel);
     });
     bot.addListener('part', function(channel, who, reason) {
-        console.log(who + ' has left ' + channel + ': ' + reason);
+        if (config.debug_output) console.log(who + ' has left ' + channel + ': ' + reason);
     });
     bot.addListener('kick', function(channel, who, by, reason) {
-        console.log(who + ' was kicked from ' + channel + ' by ' + by + ': ' + reason);
+        if (config.debug_output) console.log(who + ' was kicked from ' + channel + ' by ' + by + ': ' + reason);
     });
 }
 
 exports.listen = function(host, room, cb) {
-    console.log("listen called: " + host + " | " + room);
     if (!clients.hasOwnProperty(host)) {
-        console.log("create bot!");
-
         createBot(host, room, function(bot) {
+            if (config.debug_output) console.log("bot created for " + host);
             if (bot != undefined) {
                 clients[host] = bot;
                 exports.listen(host, room, cb);
@@ -59,7 +56,7 @@ exports.listen = function(host, room, cb) {
         });
     } else {
         clients[host].join(room, function(room) {
-            console.log("joined " + room);
+            if (config.debug_output) console.log("joined " + room);
             cb(true);
         });
     }

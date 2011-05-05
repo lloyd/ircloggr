@@ -15,6 +15,10 @@ exports.bot_name = "ircloggr";
 
 exports.config_path = path.join(path.dirname(__dirname), "config.json");
 
+exports.dbs_path = path.join(path.dirname(__dirname), "dbs");
+
+exports.debug_output = true;
+
 exports.servers = {
 };
 

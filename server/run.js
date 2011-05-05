@@ -28,7 +28,7 @@ try {
     config.parse_config_file();
 } catch(e) {
     if (e && e.code === 'EBADF') {
-        console.log("missing config file: " + e.path);        
+        console.log("missing config file: " + e.path);
     } else {
         console.log("problem reading config file (" + config.config_path + "): " + e);
     }
@@ -44,7 +44,8 @@ if (Object.keys(config.servers).length === 0) {
 // now connect to specified servers
 var toConnect = [];
 for (var host in config.servers) {
-    for (var room in config.servers[host]) {
+    for (var i = 0; i < config.servers[host].length; i++) {
+        var room = config.servers[host][i];
         toConnect.push([host, room]);
     }
 }
