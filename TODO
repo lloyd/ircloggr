@@ -1,0 +1,7 @@
+1. bot that logs into a chat room and outputs conversations to
+   stdout
+2. same bot configurable via a json config file
+3. same bot logging to SQLite databases, one per chat room
+4. WSAPI to view databases
+5. static pages for browsing history using WSAPI
+6. iterate, rinse, repeat
