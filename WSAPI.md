@@ -37,9 +37,8 @@ Response:
 
 **`/search/<host>/<room>/<text>?num=<number>&before=<id>`**
 
-Search utterances, returning a max of `<number>` (default 30), occuring before utterance with <id>.
+Search utterances, returning a max of `<number>` (default 30), occuring before utterance with specified `<id>` (default, most recent utterance).
 
 Response:
 
     same as `/utterances/' response
-
