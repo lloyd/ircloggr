@@ -1,5 +1,5 @@
-4. WSAPI to view databases
-5. static pages for browsing history using WSAPI
-6. cache headers
-7. gzip!
-8. iterate, rinse, repeat
+1. static pages for browsing history using WSAPI
+2. explore full-text indexing in sqlite (fts3|4)
+3. cache headers
+4. gzip!
+5. iterate, rinse, repeat
