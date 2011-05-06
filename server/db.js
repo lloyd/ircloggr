@@ -49,7 +49,7 @@ function logUtterance(dbHand, handle, utterance) {
 
 function toFname(host, room) {
     if (room.substr(0,1) != "#") room = "#" + room;
-    return host + "-" + room + ".sqlite";
+    return host + "_##_" + room + ".sqlite";
 }
 
 exports.log_message = function(host, room, who, utterance) {
@@ -144,3 +144,12 @@ exports.load_databases = function() {
     });
 };
 
+exports.list_logged_rooms = function() {
+    var arr = [];
+    for (var k in databases) {
+        var v = k.split("_##_");
+        if (v[1].substr(0,1) == "#") v[1] = v[1].substr(1);
+        arr.push({ host: v[0], room: v[1] });
+    }
+    return arr;
+};

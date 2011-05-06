@@ -23,3 +23,7 @@ exports.utterances = function(args, req, resp) {
         httputils.jsonResponse(resp, rez);
     });
 };
+
+exports.logs = function(args, req, resp) {
+    httputils.jsonResponse(resp, db.list_logged_rooms());
+};
