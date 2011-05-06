@@ -1,4 +1,5 @@
 4. WSAPI to view databases
 5. static pages for browsing history using WSAPI
 6. cache headers
-7. iterate, rinse, repeat
+7. gzip!
+8. iterate, rinse, repeat
