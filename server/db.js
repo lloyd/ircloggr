@@ -134,6 +134,30 @@ exports.get_utterances = function(host, room, before, num, cb) {
         });                
 };
 
+exports.search_utterances = function(host, room, phrase, before, num, cb) {
+    var fname = toFname(host,room);
+    if (!databases.hasOwnProperty(fname) || !databases[fname].handle) {
+        cb("no utterances for this host + room");
+        return;
+    }
+    var whereClause = "";
+    if (before && typeof before === 'number') {
+        whereClause = "WHERE id < " + before;
+    }
+    if (whereClause.length == 0) whereClause = "WHERE";
+    else whereClause += " AND";
+    whereClause += " msg LIKE ? ";
+    
+    console.log(whereClause);
+
+    databases[fname].handle.execute(
+        'SELECT id, ts, who, msg FROM utterances '+whereClause+' ORDER BY id DESC LIMIT ' + num,
+        [ "%"+phrase+"%"  ],
+        function(err, rows) {
+            cb(err, rows);
+        });                
+};
+
 exports.utterance_with_context = function(host, room, idIn, numIn, cb) {
     var fname = toFname(host,room);
     if (!databases.hasOwnProperty(fname) || !databases[fname].handle) {
@@ -164,6 +188,7 @@ exports.utterance_with_context = function(host, room, idIn, numIn, cb) {
 // databases
 exports.load_databases = function() {
     fs.readdir(config.dbs_path, function(err, files) {
+        if (files === undefined) return;
         files.forEach(function (f) {
             if (!databases.hasOwnProperty(f)) {
                 openDatabase(f, function(hand) {

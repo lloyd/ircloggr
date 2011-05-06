@@ -49,7 +49,7 @@ Response:
 
     same as `/utterances/' response
 
-`/search/<host>/<room>/<text>?num=<number>&before=<id>`
+`/search/<host>/<room>/<phrase>?num=<number>&before=<id>`
 
 Search utterances, returning a max of `<number>` (default 30), occuring before utterance with specified `<id>` (default, most recent utterance).
 
