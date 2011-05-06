@@ -91,6 +91,7 @@ div.rooms {
     border: 1px solid #E3E6E9;
     border-spacing: 0px;
     border-collapse: collapse;
+    width: 100%;
 }
 
 #logview .logdisplay .log {
@@ -124,8 +125,30 @@ div.rooms {
     color: #666;
 }
 
+#logview .logdisplay .log .what {
+    width: 100%;
+}
+
+
 #logview .logdisplay .log .who {
     font-weight: bold;
     color: #369;
     margin-right: 1em;
+}
+
+#logview .button {
+    color: #333;
+    background-color: #E6F0FF;
+    border: 1px solid #37C;
+    float: right;
+    border-radius: 4px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    padding: 3px;
+    font-size: .85em;
+    font-weight: bold;
+    margin-right: 1em;
+    margin-top: .5em;
+    opacity: .8;
+    cursor: pointer;
 }

@@ -131,7 +131,7 @@ exports.get_utterances = function(host, room, before, num, cb) {
         [ ],
         function(err, rows) {
             cb(err, rows);
-        });                
+        });
 };
 
 exports.search_utterances = function(host, room, phrase, before, num, cb) {
@@ -147,15 +147,13 @@ exports.search_utterances = function(host, room, phrase, before, num, cb) {
     if (whereClause.length == 0) whereClause = "WHERE";
     else whereClause += " AND";
     whereClause += " msg LIKE ? ";
-    
-    console.log(whereClause);
 
     databases[fname].handle.execute(
         'SELECT rowid as id, ts, who, msg FROM utterances '+whereClause+' ORDER BY rowid DESC LIMIT ' + num,
         [ "%"+phrase+"%"  ],
         function(err, rows) {
             cb(err, rows);
-        });                
+        });
 };
 
 exports.utterance_with_context = function(host, room, idIn, numIn, cb) {

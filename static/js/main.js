@@ -1,4 +1,22 @@
 $(document).ready(function() {
+    function setButtons(first_id, last_id, phrase) {
+        if (last_id === undefined || last_id == 0) $("#logview .button.older").hide();
+        else {
+            $("#logview .button.older").attr("mid", last_id+1).show();
+        }
+        if (typeof first_id === 'number') {
+            $("#logview .button.newer").attr("mid", first_id + 30);
+        } else {
+            $("#logview .button.newer").hide();
+        }
+
+        if (phrase) {
+            $("#logview .button").attr("phrase", phrase);
+        } else {
+            $("#logview .button").removeAttr("phrase");
+        }
+    }
+
     function showWaiting() {
         $("#logview .logdisplay").hide();
         $("#logview .waiting").show();
@@ -46,7 +64,7 @@ $(document).ready(function() {
         var path = "/api/utterances/" +
             encodeURIComponent(host) + "/" +
             encodeURIComponent(room) +
-            (typeof before === 'string' ? ("/" +  encodeURIComponent(before)) : "");
+            (typeof before === 'string' ? ("?before=" +  encodeURIComponent(before)) : "");
 
         showWaiting();
         $.ajax({
@@ -55,6 +73,9 @@ $(document).ready(function() {
             success: function(data) {
                 renderLogs(data);
                 showLogs();
+
+                // now let's set up buttons
+                setButtons(data[0].id, data[data.length - 1].id, undefined);
             },
             error: function(jqXHR, textStatus, err) {
                 showError("problem fetching logs for " + host + " #" + room + ": " + err);
@@ -84,6 +105,7 @@ $(document).ready(function() {
                 renderLogs(data);
                 $(".logdisplay .log[mid='"+item+"']").addClass("theOne");
                 showLogs();
+                setButtons(data[0].id, data[data.length - 1].id, undefined);
             },
             error: function(jqXHR, textStatus, err) {
                 showError("problem fetching logs for " + host + " #" + room + ": " + err);
@@ -91,7 +113,39 @@ $(document).ready(function() {
         });
     }
 
-    function search(host, room, before) {
+    function search(host, room, phrase, before) {
+        $("body > div").hide();
+        $("body > div#logview").show();
+        $("#logview .header .currentHost").text(host);
+        $("#logview .header .currentRoom").text("#" + room);
+        if (typeof host !== 'string' || typeof room !== 'string') {
+            location.hash = "";
+            return;
+        }
+        var path = "/api/search/" +
+            encodeURIComponent(host) + "/" +
+            encodeURIComponent(room) + "/" +
+            encodeURIComponent(phrase) +
+            (typeof before === 'string' ? ("?before=" + before) : "");
+
+        showWaiting();
+        $.ajax({
+            url: path,
+            dataType: "json",
+            success: function(data) {
+                renderLogs(data);
+                showLogs();
+                // now let's set up buttons
+                if (data.length) {
+                    setButtons(data[0].id, data[data.length - 1].id, phrase);
+                } else {
+                    setButtons(undefined, undefined, phrase);
+                }
+            },
+            error: function(jqXHR, textStatus, err) {
+                showError("problem fetching logs for " + host + " #" + room + ": " + err);
+            }
+        });
     }
 
     function mainPage() {
@@ -141,4 +195,31 @@ $(document).ready(function() {
     load();
 
     $("#logview .home").click(function() { location.hash = ""; });
+
+    $("#logview .button").click(function() {
+        // if it's got a phrase, then it's a search, otherwise it's
+        // a browse
+        var phrase = $(this).attr("phrase");
+        var mid = $(this).attr("mid");
+        console.log("newer for : " + mid + " - " + phrase);
+        var hashBits = location.hash.split("/");
+        if (phrase) {
+            location.hash = "#search/" + hashBits[1] + "/" + hashBits[2] + "/" + phrase + "/" + mid;
+        } else {
+            location.hash = "#browse/" + hashBits[1] + "/" + hashBits[2] + "/" + mid;
+        }
+    });
+
+    $("#logview .doSearch").click(function() {
+        console.log("oooh");
+        var hashBits = location.hash.split("/");
+        var phrase = $.trim($("#logview .searchText").val());
+        location.hash = "#search/" + hashBits[1] + "/" + hashBits[2] + "/" + phrase;
+    });
+    $('#logview .searchText').keypress(function(e){
+        if(e.which == 13) {
+            e.preventDefault();
+            $('#logview .doSearch').click();
+        }
+    });
 });

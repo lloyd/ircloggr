@@ -19,7 +19,8 @@ var server = connect.createServer()
     .use(connect.favicon())
     .use(connect.logger())
     .use(function(request, response, next) {
-        var urlpath = url.parse(request.url).pathname;
+        var parsedurl = url.parse(request.url);
+        var urlpath = parsedurl.pathname + (parsedurl.search ? parsedurl.search : "");
         var args = urlpath.substr(1).split('/');
         if (args[0] == 'api') {
             // proxy
@@ -32,7 +33,7 @@ var server = connect.createServer()
                 response.writeHead(res.statusCode, {
                     "Content-Type": response.getHeader('content-type')
                 });
-                res.on('data', function(chunk) {                
+                res.on('data', function(chunk) {
                     response.write(chunk);
                 }).on('end', function() {
                     response.end();
