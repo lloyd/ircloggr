@@ -31,7 +31,7 @@ function openDatabase(fname, cb) {
             });
         }
 
-        createTable("CREATE TABLE IF NOT EXISTS utterances ( id INTEGER PRIMARY KEY, ts INTEGER, who TEXT, msg TEXT )");
+        createTable("CREATE TABLE IF NOT EXISTS utterances ( ts INTEGER, who TEXT, msg TEXT )");
     });
 };
 
@@ -127,7 +127,7 @@ exports.get_utterances = function(host, room, before, num, cb) {
         whereClause = "WHERE id < " + before;
     }
     databases[fname].handle.execute(
-        'SELECT id, ts, who, msg FROM utterances '+whereClause+' ORDER BY id DESC LIMIT ' + num,
+        'SELECT rowid as id, ts, who, msg FROM utterances '+whereClause+' ORDER BY rowid DESC LIMIT ' + num,
         [ ],
         function(err, rows) {
             cb(err, rows);
@@ -142,7 +142,7 @@ exports.search_utterances = function(host, room, phrase, before, num, cb) {
     }
     var whereClause = "";
     if (before && typeof before === 'number') {
-        whereClause = "WHERE id < " + before;
+        whereClause = "WHERE rowid < " + before;
     }
     if (whereClause.length == 0) whereClause = "WHERE";
     else whereClause += " AND";
@@ -151,7 +151,7 @@ exports.search_utterances = function(host, room, phrase, before, num, cb) {
     console.log(whereClause);
 
     databases[fname].handle.execute(
-        'SELECT id, ts, who, msg FROM utterances '+whereClause+' ORDER BY id DESC LIMIT ' + num,
+        'SELECT rowid as id, ts, who, msg FROM utterances '+whereClause+' ORDER BY rowid DESC LIMIT ' + num,
         [ "%"+phrase+"%"  ],
         function(err, rows) {
             cb(err, rows);
@@ -176,7 +176,7 @@ exports.utterance_with_context = function(host, room, idIn, numIn, cb) {
     var whereClause = "WHERE id >= " + from + " AND id <= " + to;
 
     databases[fname].handle.execute(
-        'SELECT id, ts, who, msg FROM utterances '+whereClause+' ORDER BY id DESC LIMIT ' + (num*2+1),
+        'SELECT rowid as id, ts, who, msg FROM utterances '+whereClause+' ORDER BY rowid DESC LIMIT ' + (num*2+1),
         [ ],
         function(err, rows) {
             cb(err, rows);
