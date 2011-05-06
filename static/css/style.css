@@ -87,13 +87,22 @@ div.rooms {
     color: #666;
 }
 
+#logview .logdisplay {
+    border: 1px solid #E3E6E9;
+    border-spacing: 0px;
+    border-collapse: collapse;
+}
+
 #logview .logdisplay .log {
     padding: .1em;
     height: 1.5em;
-    border: 1px solid #E3E6E9;
-    border-left: 2px solid #E3E6E9;
-    border-right: 2px solid #E3E6E9;
+    border: 0;
     cursor: pointer;
+}
+
+#logview .logdisplay .log td {
+    padding: 3px;
+    border: 1px solid #E3E6E9;
 }
 
 #logview .logdisplay .log.odd {
