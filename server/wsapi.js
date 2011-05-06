@@ -42,6 +42,35 @@ exports.utterances = function(args, req, resp) {
     });
 };
 
+exports.context = function(args, req, resp) {
+    var urlobj = url.parse(req.url, true);
+    var getArgs = urlobj.query;
+
+    if (args.length != 4) {
+        httputils.badRequest(resp, "bad request url, I expect: /context/<host>/<room>/<id>");        
+        return;
+    }
+    
+    var num = 15;
+
+    if (getArgs.hasOwnProperty('num')) {
+        var n = parseInt(getArgs['num']);
+        if (!isNaN(n)) num = n;
+    }
+
+    var id = parseInt(args[3]);
+    if (isNaN(id)) id = 0;
+
+    db.utterance_with_context(args[1], args[2], id, num, function(err, rez)  {
+        if (err) {
+            httputils.badRequest(resp, "cant get utterances with context: " + err);
+            return;
+        }
+        // XXX: cache headers!
+        httputils.jsonResponse(resp, rez);
+    });
+};
+
 exports.logs = function(args, req, resp) {
     httputils.jsonResponse(resp, db.list_logged_rooms());
 };

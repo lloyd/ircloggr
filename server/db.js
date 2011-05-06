@@ -134,6 +134,32 @@ exports.get_utterances = function(host, room, before, num, cb) {
         });                
 };
 
+exports.utterance_with_context = function(host, room, idIn, numIn, cb) {
+    var fname = toFname(host,room);
+    if (!databases.hasOwnProperty(fname) || !databases[fname].handle) {
+        cb("no utterances for this host + room");
+        return;
+    }
+    var num = 15, id = 0;
+    if (typeof numIn === 'number') {
+        if (numIn >= 0) num = numIn;
+        if (num > 50) num = 50;
+    }
+    if (idIn && typeof idIn === 'number') id = idIn;
+
+    var from = ((id > num) ? (id-num) : 0);
+    var to = id + num;
+    var whereClause = "WHERE id >= " + from + " AND id <= " + to;
+
+    databases[fname].handle.execute(
+        'SELECT id, ts, who, msg FROM utterances '+whereClause+' ORDER BY id DESC LIMIT ' + (num*2+1),
+        [ ],
+        function(err, rows) {
+            cb(err, rows);
+        });                
+};
+
+
 // at process startup, client should invoke load_databases to load up all them
 // databases
 exports.load_databases = function() {
