@@ -14,10 +14,10 @@ exports.utterances = function(args, req, resp) {
     var getArgs = urlobj.query;
 
     if (args.length != 3) {
-        httputils.badRequest(resp, "bad request url, I expect: /utterances/<host>/<room>");        
+        httputils.badRequest(resp, "bad request url, I expect: /utterances/<host>/<room>");
         return;
     }
-    
+
     var before = 0;
     var num = 30;
 
@@ -47,10 +47,10 @@ exports.search = function(args, req, resp) {
     var getArgs = urlobj.query;
 
     if (args.length != 4) {
-        httputils.badRequest(resp, "bad request url, I expect: /utterances/<host>/<room>");        
+        httputils.badRequest(resp, "bad request url, I expect: /utterances/<host>/<room>");
         return;
     }
-    
+
     var before = 0;
     var num = 30;
 
@@ -83,7 +83,7 @@ exports.context = function(args, req, resp) {
         httputils.badRequest(resp, "bad request url, I expect: /context/<host>/<room>/<id>");        
         return;
     }
-    
+
     var num = 15;
 
     if (getArgs.hasOwnProperty('num')) {

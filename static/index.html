@@ -18,15 +18,25 @@
       <div class="roomlist">
         Loading room logs...
       </div>
+    </div>
   </div>
   <div id="logview">
-    <div id="header">
-      <div id="home">All Logs</div><div id="currentHost"></div><div id="currentLogs"></div>
+    <div class="header">
+      <div class="home">irclog.gr</div><div class="currentHost"></div><div class="currentRoom"></div>
     </div>
-    <div id="logdisplay">
+    <div class="waiting">
+      talking to your friendly server...
+    </div>
+    <div class="logdisplay">
     </div>
   </div>
+  <div id="templates">
+    <div class="room"><div class="host"></div><div class="room"></div></div>
+    <div class="log"><div class="time"></div><div class="msg"><span class="who">&lt;<span></span>&gt;</span><span class="what"></span></div></div>
+  </div>
 </body>
-<script src="js/main.js"></script>
+<script src="js/jquery-1.6.min.js"></script>
+<script src="js/jquery.hashchange.min.js"></script>
+<script src="js/jquery.timeago.min.js"></script>
 <script src="js/main.js"></script>
 </html>

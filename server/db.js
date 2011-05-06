@@ -204,6 +204,7 @@ exports.list_logged_rooms = function() {
     for (var k in databases) {
         var v = k.split("_##_");
         if (v[1].substr(0,1) == "#") v[1] = v[1].substr(1);
+        v[1] = v[1].substr(0, v[1].length - ".sqlite".length);
         arr.push({ host: v[0], room: v[1] });
     }
     return arr;
