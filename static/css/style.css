@@ -1,0 +1,43 @@
+body {
+    margin: 0;
+    padding: 0;
+    font: 13px/1.5 Helvetica, Arial, 'Liberation Sans', FreeSans, sans-serif;
+}
+
+#homescreen {
+    width: 900px;
+    margin: auto;
+}
+
+#homescreen .title {
+    margin-top: -.5em;
+    margin-top: 0;
+    font-family: 'Permanent Marker', arial, serif;
+    font-size: 4em;
+}
+#homescreen .subtitle {
+    margin-top: -1em;
+    font-style: italic;
+    font-size: .8em;
+}
+#homescreen .summary {
+    float:right;
+    width: 600px;
+    margin: auto;
+    font-size: 1.2em;
+    margin-top: 1.6em;
+    text-align: center;
+}
+
+div#logview {
+    display: none;
+}
+
+div.rooms .iknow {
+    display: none;
+}
+
+div.rooms: {
+    width: 600px;
+    margin: auto;
+}

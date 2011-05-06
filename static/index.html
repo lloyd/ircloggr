@@ -2,10 +2,22 @@
 <html>
 <head>
   <title>ircloggr</title>
-  <link href='css/style.css' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Permanent+Marker' rel='stylesheet' type='text/css'>
+  <link href='css/style.css' type='text/css' rel='stylesheet'>
 </head>
 <body>
   <div id="homescreen">
+    <div class="summary"><a href="http://github.com/lloyd/ircloggr">ircloggr</a> is an open source
+      framework for archiving IRC conversations and making them available on the web.
+      This site is a public instance of that project.
+    </div>
+    <div class="title">irclog.gr</div>
+    <div class="subtitle">Online IRC logs for open source projects</div>
+    <div class="rooms">
+      <div class="iknow">I know about <span class="howmany"></span> rooms:</div>
+      <div class="roomlist">
+        Loading room logs...
+      </div>
   </div>
   <div id="logview">
     <div id="header">
@@ -15,5 +27,6 @@
     </div>
   </div>
 </body>
+<script src="js/main.js"></script>
 <script src="js/main.js"></script>
 </html>
