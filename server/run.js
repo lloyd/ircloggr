@@ -66,14 +66,6 @@ function connectOneRoom() {
 }
 connectOneRoom();
 
-/*
-irc.listen("irc.mozilla.org", "#ircloggr", function(x) {
-    irc.listen("irc.mozilla.org", "#ircloggr2", function(x) {
-        runWSAPI();
-    });
-});
-*/
-
 var server = undefined;
 
 function runWSAPI() {
