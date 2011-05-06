@@ -47,8 +47,13 @@ function logUtterance(dbHand, handle, utterance) {
         });
 }
 
+function toFname(host, room) {
+    if (room.substr(0,1) != "#") room = "#" + room;
+    return host + "-" + room + ".sqlite";
+}
+
 exports.log_message = function(host, room, who, utterance) {
-    var fname = host + "-" + room + ".sqlite";
+    var fname = toFname(host, room);
     if (databases[fname]) {
         if (databases[fname].queue) {
             databases[fname].queue.push([who, utterance]);
@@ -109,3 +114,33 @@ exports.log_message = function(host, room, who, utterance) {
         });
     }
 };
+
+
+exports.get_utterances = function(host, room, cb) {
+    var fname = toFname(host,room);
+    if (!databases.hasOwnProperty(fname) || !databases[fname].handle) {
+        cb("no utterances for this host + room");
+        return;
+    }
+    databases[fname].handle.execute(
+        'SELECT id, ts, who, utterance FROM utterances ORDER BY id DESC LIMIT 30',
+        [ ],
+        function(err, rows) {
+            cb(err, rows);
+        });                
+};
+
+// at process startup, client should invoke load_databases to load up all them
+// databases
+exports.load_databases = function() {
+    fs.readdir(config.dbs_path, function(err, files) {
+        files.forEach(function (f) {
+            if (!databases.hasOwnProperty(f)) {
+                openDatabase(f, function(hand) {
+                    databases[f] = { handle: hand };
+                });
+            }
+        });
+    });
+};
+

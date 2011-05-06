@@ -16,7 +16,8 @@ const sys = require("sys"),
 httputils = require('./httputils.js'),
   connect = require('connect'),
       irc = require('./irc.js'),
-   config = require('./config.js');
+   config = require('./config.js'),
+       db = require('./db.js');
 
 // XXX: command line switch handling
 
@@ -32,10 +33,13 @@ try {
     process.exit(1);
 }
 
+// load up databases
+db.load_databases();
+
 // need rooms configured, otherwise, what are we even doing?
 if (Object.keys(config.servers).length === 0) {
     console.log("No irc rooms are configured!  Go update the config file!");
-    process.exit(1);
+//    process.exit(1);
 }
 
 // now connect to specified servers
@@ -85,7 +89,7 @@ function runWSAPI() {
             try {
                 var args = urlpath.substr(1).split('/');
                 if (wsapi[args[0]]) {
-                    wsapi[urlpath](request, response);
+                    wsapi[args[0]](args, request, response);
                 } else {
                     httputils.fourOhFour(response, "no such function: " + urlpath + "\n");
                 }
