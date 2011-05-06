@@ -116,14 +116,18 @@ exports.log_message = function(host, room, who, utterance) {
 };
 
 
-exports.get_utterances = function(host, room, cb) {
+exports.get_utterances = function(host, room, before, num, cb) {
     var fname = toFname(host,room);
     if (!databases.hasOwnProperty(fname) || !databases[fname].handle) {
         cb("no utterances for this host + room");
         return;
     }
+    var whereClause = "";
+    if (before && typeof before === 'number') {
+        whereClause = "WHERE id < " + before;
+    }
     databases[fname].handle.execute(
-        'SELECT id, ts, who, msg FROM utterances ORDER BY id DESC LIMIT 30',
+        'SELECT id, ts, who, msg FROM utterances '+whereClause+' ORDER BY id DESC LIMIT ' + num,
         [ ],
         function(err, rows) {
             cb(err, rows);
