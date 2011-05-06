@@ -28,7 +28,7 @@ $(document).ready(function() {
         });
     }
 
-    function renderLogs(data) {
+    function renderLogs(data, chrono) {
         function clickToContext() {
             var hashBits = location.hash.split("/");
             location.hash = "#show/" + hashBits[1] + "/" + hashBits[2] + "/" + $(this).attr("mid");
@@ -43,8 +43,8 @@ $(document).ready(function() {
             l.find(".what").text(data[i].msg);
             l.click(clickToContext);
             if (i % 2) l.addClass("odd");
-            l.appendTo($(".logdisplay"));
-            console.log(data[i].who);
+            if (chrono) l.prependTo($(".logdisplay"));
+            else l.appendTo($(".logdisplay"));
         }
     }
 
@@ -71,7 +71,7 @@ $(document).ready(function() {
             url: path,
             dataType: "json",
             success: function(data) {
-                renderLogs(data);
+                renderLogs(data, true);
                 showLogs();
 
                 // now let's set up buttons
@@ -102,7 +102,7 @@ $(document).ready(function() {
             url: path,
             dataType: "json",
             success: function(data) {
-                renderLogs(data);
+                renderLogs(data, true);
                 $(".logdisplay .log[mid='"+item+"']").addClass("theOne");
                 showLogs();
                 setButtons(data[0].id, data[data.length - 1].id, undefined);
@@ -133,7 +133,7 @@ $(document).ready(function() {
             url: path,
             dataType: "json",
             success: function(data) {
-                renderLogs(data);
+                renderLogs(data, false);
                 showLogs();
                 // now let's set up buttons
                 if (data.length) {
