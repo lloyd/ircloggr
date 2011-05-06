@@ -31,13 +31,13 @@ function openDatabase(fname, cb) {
             });
         }
 
-        createTable("CREATE TABLE IF NOT EXISTS utterances ( id INTEGER PRIMARY KEY, ts INTEGER, who TEXT, utterance TEXT )");
+        createTable("CREATE TABLE IF NOT EXISTS utterances ( id INTEGER PRIMARY KEY, ts INTEGER, who TEXT, msg TEXT )");
     });
 };
 
 function logUtterance(dbHand, handle, utterance) {
     dbHand.execute(
-        "INSERT INTO utterances (ts, who, utterance) VALUES(strftime('%s','now'),?,?)",
+        "INSERT INTO utterances (ts, who, msg) VALUES(strftime('%s','now'),?,?)",
         [ handle, utterance ],
         function(error, rows) {
             if (error) {
@@ -123,7 +123,7 @@ exports.get_utterances = function(host, room, cb) {
         return;
     }
     databases[fname].handle.execute(
-        'SELECT id, ts, who, utterance FROM utterances ORDER BY id DESC LIMIT 30',
+        'SELECT id, ts, who, msg FROM utterances ORDER BY id DESC LIMIT 30',
         [ ],
         function(err, rows) {
             cb(err, rows);
