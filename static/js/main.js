@@ -95,7 +95,7 @@ $(document).ready(function() {
         var path = "/api/context/" +
             encodeURIComponent(host) + "/" +
             encodeURIComponent(room) + "/" +
-            encodeURIComponent(item) + "?num=15";
+            encodeURIComponent(item) + "?num=8";
 
         showWaiting();
         $.ajax({
