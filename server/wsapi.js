@@ -107,3 +107,8 @@ exports.context = function(args, req, resp) {
 exports.logs = function(args, req, resp) {
     httputils.jsonResponse(resp, db.list_logged_rooms());
 };
+
+exports.code_update = function(args, req, resp) {
+    console.log("going down for code update!");
+    process.exit(0);
+}
