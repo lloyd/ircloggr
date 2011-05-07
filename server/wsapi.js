@@ -112,3 +112,7 @@ exports.code_update = function(args, req, resp) {
     console.log("going down for code update!");
     process.exit(0);
 }
+
+exports.ping = function(args, req, resp) {
+    httputils.jsonResponse(resp, true);
+};
