@@ -51,7 +51,7 @@ for (var host in config.servers) {
     }
 }
 function connectOneRoom() {
-    if (toConnect.length == 0) runWSAPI();
+    if (toConnect.length == 0) return;
     else {
         var cur = toConnect.shift();
         if (cur[1].substr(0,1) != '#') cur[1] = "#" + cur[1];
@@ -66,28 +66,25 @@ function connectOneRoom() {
 }
 connectOneRoom();
 
-var server = undefined;
-
-function runWSAPI() {
-    server = connect.createServer()
-        .use(connect.favicon())
-        .use(connect.logger({
-            format: ":status :method :remote-addr :response-time :url",
-            stream: fs.createWriteStream(path.join(__dirname, "server.log"))
-        }))
-        .use(function(request, response, serveFile) {
-            var urlpath = url.parse(request.url).pathname;
-            // break pathname up by '/'
-            try {
-                var args = urlpath.substr(1).split('/');
-                if (wsapi[args[0]]) {
-                    wsapi[args[0]](args, request, response);
-                } else {
-                    httputils.fourOhFour(response, "no such function: " + urlpath + "\n");
-                }
-            } catch(e) {
-                httputils.badRequest(response, e.toString());
+var server = server = connect.createServer()
+    .use(connect.favicon())
+    .use(connect.logger({
+        format: ":status :method :remote-addr :response-time :url",
+        stream: fs.createWriteStream(path.join(__dirname, "server.log"))
+    }))
+    .use(function(request, response, serveFile) {
+        var urlpath = url.parse(request.url).pathname;
+        // break pathname up by '/'
+        try {
+            var args = urlpath.substr(1).split('/');
+            if (wsapi[args[0]]) {
+                wsapi[args[0]](args, request, response);
+            } else {
+                httputils.fourOhFour(response, "no such function: " + urlpath + "\n");
             }
-        })
-        .listen(config.port, config.host);
-}
+        } catch(e) {
+            httputils.badRequest(response, e.toString());
+        }
+    })
+    .listen(config.port, config.host);
+
