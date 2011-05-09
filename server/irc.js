@@ -8,6 +8,7 @@
 const irc = require('irc'),
        db = require("./db.js"),
    config = require("./config.js");
+ handlers = require("./irchandlers.js").handlers;
 
 // a mapping of servernames to irc client handles
 var clients = {
@@ -20,7 +21,31 @@ function createBot(host, room, cb) {
         cb(undefined);
     });
     bot.addListener('message', function (from, to, message) {
+        // is this a public message to me?  if so, let's
+        // see if there's a handler that would like to respond
         db.log_message(host, to, from, message);
+        if (to === room && config.bot_name == message.substr(0, config.bot_name.length)) {
+            // chop off our name
+            message = message.substr(config.bot_name.length);
+            // chop of typical chars that delimit our name from message
+            while (message.length && (message.charAt(0) == ':' || message.charAt(0) == ',')) {
+                message = message.substr(1);
+            }
+            message = message.trim();
+
+            // let's try to find a handler
+            function tryHandler(i) {
+                if (i >= handlers.length) return;
+                handlers[i](host, room, from, message, function(response) {
+                    if (response != undefined) {
+                        bot.say(to, response);
+                    } else {
+                        tryHandler(i+1);
+                    }
+                });
+            }
+            tryHandler(0);
+        }
     });
     bot.addListener('connect', function () {
         if (config.debug_output) console.log("connected to " + host);

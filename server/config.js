@@ -23,6 +23,8 @@ exports.host = "127.0.0.1";
 
 exports.port = 51432;
 
+exports.deployment_url = "http://irclog.gr";
+
 exports.servers = {
 };
 

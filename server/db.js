@@ -207,3 +207,19 @@ exports.list_logged_rooms = function() {
     }
     return arr;
 };
+
+// forget 30 minutes of conversation in host/room
+exports.i_think_i_hit_my_head_or_something = function(host, room, cb) {
+    var fname = toFname(host,room);
+    if (!databases.hasOwnProperty(fname) || !databases[fname].handle) {
+        cb(true);
+        return;
+    }
+
+    databases[fname].handle.execute(
+        "DELETE FROM utterances WHERE strftime('%s','now','-30 minutes') < ts",
+        [ ],
+        function(err, rows) {
+            cb(err == undefined);
+        });                
+};
