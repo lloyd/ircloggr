@@ -19,14 +19,14 @@ I hope you'll find ircloggr simple to hack on.  Here are the steps to get
 a local instance up and running:
 
   1. Install node.js and prerequisites listed above
-  2. Copy `config.json.sample` to `config.json` and modify to your tast
+  2. Copy `config.json.sample` to `config.json` and modify to taste
   3. start the ircloggr server: `node server/run.js`
   4. start the test harness: `node test/test_server.js
   5. point your browser at http://localhost:60000/
 
 The "test server" in step four is basically a tiny little web server
 that serves up the files in /static at root, and proxies requests to
-/api/* to the ircloggr [web services api](blob/master/WSAPI.md).  It
+/api/* to the ircloggr [web services api](/lloyd/ircloggr/blob/master/WSAPI.md).  It
 simulates the role that nginx or another webserver/reverse proxy
 server might play during deployment.
 
