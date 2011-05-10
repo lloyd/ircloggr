@@ -1,8 +1,8 @@
 $(document).ready(function() {
     var linkRegex = /(?:https?:\/\/)(?:[\da-z\.-]+)\.(?:[a-z\.]{2,6})(?:[\/\w \.-]*)*\/?(?:\?[\w\d=]+)?/g;
 
-    function formatMessage(msg) {
-        return msg.replace(linkRegex, function (match) {
+    function formatMessage(who, msg) {
+        return "<span class=\"who\">" + who + ":</span>" + msg.replace(linkRegex, function (match) {
             console.log("match: " + match);
             return '<a href="' + match + '">' + match + "</a>";
         });
@@ -48,8 +48,7 @@ $(document).ready(function() {
             var l = lt.clone();
             l.attr("mid", data[i].id);
             l.find(".time").text($.timeago(new Date(1000 * data[i].ts)));
-            l.find(".who span").text(data[i].who);
-            l.find(".what").html(formatMessage(data[i].msg));
+            l.find(".what").html(formatMessage(data[i].who, data[i].msg));
             l.click(clickToContext);
             if (i % 2) l.addClass("odd");
             if (chrono) l.prependTo($(".logdisplay"));
