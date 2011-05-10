@@ -1,4 +1,13 @@
 $(document).ready(function() {
+    var linkRegex = /(?:https?:\/\/)(?:[\da-z\.-]+)\.(?:[a-z\.]{2,6})(?:[\/\w \.-]*)*\/?(?:\?[\w\d=]+)?/g;
+
+    function formatMessage(msg) {
+        return msg.replace(linkRegex, function (match) {
+            console.log("match: " + match);
+            return '<a href="' + match + '">' + match + "</a>";
+        });
+    }
+
     function setButtons(first_id, last_id, phrase) {
         if (last_id === undefined || last_id == 0) $("#logview .button.older").hide();
         else {
@@ -40,7 +49,7 @@ $(document).ready(function() {
             l.attr("mid", data[i].id);
             l.find(".time").text($.timeago(new Date(1000 * data[i].ts)));
             l.find(".who span").text(data[i].who);
-            l.find(".what").text(data[i].msg);
+            l.find(".what").html(formatMessage(data[i].msg));
             l.click(clickToContext);
             if (i % 2) l.addClass("odd");
             if (chrono) l.prependTo($(".logdisplay"));

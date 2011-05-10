@@ -152,3 +152,7 @@ div.rooms {
     opacity: .8;
     cursor: pointer;
 }
+
+a {
+    color: #039;
+}
