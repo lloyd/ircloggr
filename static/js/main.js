@@ -2,6 +2,8 @@ $(document).ready(function() {
     var linkRegex = /(?:https?:\/\/)(?:[\da-z\.-]+)\.(?:[a-z\.]{2,6})(?:[\/\w \.-]*)*\/?(?:#[\w\d=\/\.-]+)?(?:\?[\w\d=]+)?/g;
 
     function formatMessage(who, msg) {
+        // entity encode
+        msg = $("<div/>").text(msg).html();
         // make links clickable
         msg = msg.replace(linkRegex, function (match) {
             return '<a href="' + match + '">' + match + "</a>";
