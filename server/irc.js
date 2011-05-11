@@ -24,9 +24,9 @@ function createBot(host, room, cb) {
         // is this a public message to me?  if so, let's
         // see if there's a handler that would like to respond
         db.log_message(host, to, from, message);
-        if (to === room && config.bot_name == message.substr(0, config.bot_name.length)) {
+        if (to === room && bot.nick == message.substr(0, bot.nick.length)) {
             // chop off our name
-            message = message.substr(config.bot_name.length);
+            message = message.substr(bot.nick.length);
             // chop of typical chars that delimit our name from message
             while (message.length && (message.charAt(0) == ':' || message.charAt(0) == ',')) {
                 message = message.substr(1);
@@ -80,8 +80,8 @@ exports.listen = function(host, room, cb) {
             }
         });
     } else {
-        clients[host].join(room, function(room) {
-            if (config.debug_output) console.log("joined " + room);
+        clients[host].join(room, function(who) {
+            if (config.debug_output) console.log(who + " has joined");
             cb(true);
         });
     }
