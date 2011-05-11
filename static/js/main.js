@@ -1,14 +1,76 @@
 $(document).ready(function() {
     var linkRegex = /(?:https?:\/\/)(?:[\da-z\.-]+)\.(?:[a-z\.]{2,6})(?:[\/\w \.-]*)*\/?(?:#[\w\d=\/\.-]+)?(?:\?[_\.=&\w\d=;]+)?/g;
 
+    var markupTable = {
+        0x02: "b",
+        0x11: "tt",
+        0x1d: "i",
+        0x1f: "ul"
+
+    };
+
     function formatMessage(who, msg) {
         // entity encode
         msg = $("<div/>").text(msg).html();
+
         // make links clickable
         msg = msg.replace(linkRegex, function (match) {
             return '<a href="' + match + '">' + match + "</a>";
         });
 
+        // color highlight messages
+        var openTags = [ ];
+        var msgbuf = "";
+        function closeTags(until) {
+            while (openTags.length) {
+                var t = openTags.pop();
+                msgbuf += "</" + t + ">";
+                if (until && until == t) break;
+            }
+        }
+        function isOpen(t) {
+            for (var i=0; i < openTags.length; i++) if (openTags[i] == t) return true;
+            return false;
+        }
+        function openTag(t) {
+            msgbuf += "<" + t + ">";
+            openTags.push(t);
+        }
+        for (var i =0; i < msg.length; i++) {
+            if (markupTable.hasOwnProperty(msg.charCodeAt(i))) {
+                var t = markupTable[msg.charCodeAt(i)];
+                if (isOpen(t)) closeTags(t);
+                else openTag(t);
+            } else if (msg.charCodeAt(i) == 0x0f) {
+                closeTags();
+            } else if (msg.charCodeAt(i) == 0x03) {
+                if (isOpen('span')) closeTags('irc');
+                
+                // span coloring!
+                var color = undefined;
+                if (msg.charCodeAt(i+1) >= 0x30 &&  msg.charCodeAt(i+1) <= 0x39) {
+                    if (msg.charCodeAt(i+2) >= 0x30 &&  msg.charCodeAt(i+2) <= 0x39) {
+                        color = parseInt(msg.substr(i+1,2), 10);
+                        i += 2;
+                    } else {
+                        color = parseInt(msg.substr(i+1,1), 10);
+                        i += 1;
+                    }
+                }
+                if (color != undefined && color >= 0 && color <= 15) {
+                    msgbuf += "<span class=\"clr_" + color.toString() + "\">";
+                    openTags.push("span");
+                }
+            } else if (msg.charCodeAt(i) < 32 && msg.charCodeAt(i) != 1) {
+                // uh oh, unknown control code!  add a question mark to output
+                msgbuf += "?(" + msg.charCodeAt(i) + ")";
+            } else {
+                msgbuf += msg.charAt(i);
+            }
+        }
+        closeTags();
+        msg = msgbuf;
+        
         // is this an action?
         if (msg.length >= 10 && msg.charCodeAt(0) == 1 && msg.charCodeAt(msg.length - 1) == 1
             & msg.substr(1,6) == "ACTION")

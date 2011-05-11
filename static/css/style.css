@@ -161,3 +161,20 @@ div.rooms {
 a {
     color: #039;
 }
+
+span.clr_0     { color: white; }
+span.clr_1     { color: black; }
+span.clr_2     { color: navy; }
+span.clr_3     { color: green; }
+span.clr_4     { color: red; }
+span.clr_5     { color: brown; }
+span.clr_6     { color: purple; }
+span.clr_7     { color: orange; }
+span.clr_8     { color: yellow; }
+span.clr_9     { color: lime; }
+span.clr_10    { color: teal; }
+span.clr_11    { color: cyan; }
+span.clr_12    { color: blue; }
+span.clr_13    { color: magenta; }
+span.clr_14    { color: grey; }
+span.clr_15    { color: silver; }
