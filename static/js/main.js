@@ -170,12 +170,10 @@ $(document).ready(function() {
     function mainPage() {
         $("body > div").hide();
         $("#homescreen").fadeIn(500);
-        console.log("foo");
         $.ajax({
             url: '/api/logs',
             dataType: "json",
             success: function(data) {
-                console.log(data);
                 $(".roomlist").empty();
                 $(".howmany").text(data.length);
                 for (var i = 0; i < data.length; i++) {
@@ -197,7 +195,6 @@ $(document).ready(function() {
     }
 
     function load() {
-        console.log("hashchange: " + location.hash);
         var hash = $.trim(location.hash);
         var elems = hash.split('/');
         if (elems[0] === "" || elems[0] === "#home") {
@@ -220,7 +217,6 @@ $(document).ready(function() {
         // a browse
         var phrase = $(this).attr("phrase");
         var mid = $(this).attr("mid");
-        console.log("newer for : " + mid + " - " + phrase);
         var hashBits = location.hash.split("/");
         if (phrase) {
             location.hash = "#search/" + hashBits[1] + "/" + hashBits[2] + "/" + phrase + "/" + mid;
@@ -230,7 +226,6 @@ $(document).ready(function() {
     });
 
     $("#logview .doSearch").click(function() {
-        console.log("oooh");
         var hashBits = location.hash.split("/");
         var phrase = $.trim($("#logview .searchText").val());
         location.hash = "#search/" + hashBits[1] + "/" + hashBits[2] + "/" + phrase;
