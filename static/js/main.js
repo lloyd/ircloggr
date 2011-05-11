@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    var linkRegex = /(?:https?:\/\/)(?:[\da-z\.-]+)\.(?:[a-z\.]{2,6})(?:[\/\w \.-]*)*\/?(?:#[\w\d=]+)?(?:\?[\w\d=]+)?/g;
+    var linkRegex = /(?:https?:\/\/)(?:[\da-z\.-]+)\.(?:[a-z\.]{2,6})(?:[\/\w \.-]*)*\/?(?:#[\w\d=\/\.-]+)?(?:\?[\w\d=]+)?/g;
 
     function formatMessage(who, msg) {
         // make links clickable
