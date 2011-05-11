@@ -129,6 +129,11 @@ div.rooms {
     width: 100%;
 }
 
+.log .what .action {
+    width: 100%;
+    padding-left: 7em;
+}
+
 
 #logview .logdisplay .log .who {
     font-weight: bold;

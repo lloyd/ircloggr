@@ -2,10 +2,21 @@ $(document).ready(function() {
     var linkRegex = /(?:https?:\/\/)(?:[\da-z\.-]+)\.(?:[a-z\.]{2,6})(?:[\/\w \.-]*)*\/?(?:#[\w\d=]+)?(?:\?[\w\d=]+)?/g;
 
     function formatMessage(who, msg) {
-        return "<span class=\"who\">" + who + ":</span>" + msg.replace(linkRegex, function (match) {
-            console.log("match: " + match);
+        // make links clickable
+        msg = msg.replace(linkRegex, function (match) {
             return '<a href="' + match + '">' + match + "</a>";
         });
+
+        // is this an action?
+        if (msg.length >= 10 && msg.charCodeAt(0) == 1 && msg.charCodeAt(msg.length - 1) == 1
+            & msg.substr(1,6) == "ACTION")
+        {
+            return "<div class=\"action\">*<span class=\"who\">" + who + "</span>" + msg.substr(8, msg.length - 9) + "</div>";
+        }
+        else
+        {
+            return "<span class=\"who\">" + who + ":</span>" + msg;
+        }
     }
 
     function setButtons(first_id, last_id, phrase) {
