@@ -1,0 +1,16 @@
+{
+    "name": "ircloggr"
+  , "version": "0.0.1"
+  , "private": true
+  , "dependencies": {
+    "irc": "0.3.3",
+    "connect": "1.8.5",
+    "sqlite": "*"
+  }
+  , "scripts": {
+    "start": "node server/run.js"
+  },
+  "engines": {
+    "node": ">= 0.6.7"
+  }
+}
