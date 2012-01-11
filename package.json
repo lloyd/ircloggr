@@ -9,7 +9,8 @@
     "vows": "0.5.13"
   }
   , "scripts": {
-    "start": "node server/run.js"
+    "start": "node server/run.js",
+    "test": "node_modules/.bin/vows"
   },
   "engines": {
     "node": ">= 0.6.7"
