@@ -41,7 +41,7 @@ Response:
 `/context/<host>/<room>/<id>?num=<number>`
 
 
-Get an uttrance and its context: <number> before it, and <number>
+Get an utterance and its context: <number> before it, and <number>
 after it.  number defaults to 15, max 50.  This API is useful for
 linking to specific utterances.
 

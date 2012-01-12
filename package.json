@@ -1,0 +1,20 @@
+{
+    "name": "ircloggr"
+  , "version": "0.0.1"
+  , "private": true
+  , "dependencies": {
+    "irc": "0.3.3",
+    "connect": "1.8.5",
+    "mysql": "0.9.5",
+    "vows": "0.5.13",
+    "winston": "0.5.6"
+  }
+  , "scripts": {
+    "start": "bin/ircloggr_web",
+    "test": "node_modules/.bin/vows"
+  },
+  "bin": "bin/ircloggr_web",
+  "engines": {
+    "node": ">= 0.6.7"
+  }
+}
