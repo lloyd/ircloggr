@@ -70,11 +70,23 @@ suite.addBatch({
 
 suite.addBatch({
   "logging utterances": {
-    topic: function() { db.logMessage("irc.freenode.net", "#yajl", "lloyd", "I love ircloggr", this.callback) },
+    topic: function() {
+      db.logMessage({
+        host: "irc.freenode.net",
+        room: "#yajl",
+        who: "lloyd",
+        utterance: "I love ircloggr"
+      }, this.callback);
+    },
     "succeeds": function(err) { assert.isNull(err) },
     "and more utterances": {
       topic: function() {
-        db.logMessage("irc.freenode.net", "yajl", "lloyd", "he is kind and gentle", this.callback)
+        db.logMessage({
+          host: "irc.freenode.net",
+          room: "yajl",
+          who: "lloyd",
+          utterance: "he is kind and gentle"
+        }, this.callback);
       },      
       "succeeds": function(err) { assert.isNull(err) },
     }
@@ -110,17 +122,20 @@ suite.addBatch({
       var cb = this.callback;
       var completed = 0;
       for (var i = 0; i < 200; i++) {
-        db.logMessage(
-          "irc.mozilla.org", "#identity", "lloyd", "This is utterance #" + i,
-          function(err, r) {
-            if (completed < 0) return;
-            else if (err) {
-              completed = -1;
-              cb(err);
-            } else if (++completed === 200) {
-              cb(null);
-            }
-          });
+        db.logMessage({
+          host: "irc.mozilla.org",
+          room: "#identity",
+          who: "lloyd",
+          utterance: "This is utterance #" + i
+        }, function(err, r) {
+          if (completed < 0) return;
+          else if (err) {
+            completed = -1;
+            cb(err);
+          } else if (++completed === 200) {
+            cb(null);
+          }
+        });
       }
     },
     works: function(err, r) {
