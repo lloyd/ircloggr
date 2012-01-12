@@ -11,7 +11,8 @@ const
 path = require("path"),
 irc = require('../lib/irc.js'),
 config = require('../lib/config.js'),
-db = require('../lib/db.js');
+db = require('../lib/db.js'),
+winston = require('winston');
 
 // load up databases
 db.connect(function(err) {
