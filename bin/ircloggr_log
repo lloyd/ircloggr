@@ -1,67 +1,67 @@
+#!/usr/bin/env node
+
 /**
- * ircloggr - a node.js all-in-one implementation of irc logging visible via
+ * ircloggr - a nodejs implementation of irc logging visible via
  *            a REST/JSON interface.
  *
  * See LICENSE file for licensing information.
  */
 
-const sys = require("sys"),
-     http = require("http"),
-      url = require("url"),
-     path = require("path"),
-       fs = require("fs"),
-  connect = require("connect");
-     path = require('path'),
-    wsapi = require('./wsapi.js'),
-httputils = require('./httputils.js'),
-  connect = require('connect'),
-      irc = require('./irc.js'),
-   config = require('./config.js'),
-       db = require('./db.js');
+const
+path = require("path"),
+irc = require('../lib/irc.js'),
+config = require('../lib/config.js'),
+db = require('../lib/db.js');
 
 // XXX: command line switch handling
 
 // parse config file
 try {
-    config.parse_config_file();
+  config.parse_config_file();
 } catch(e) {
-    if (e && e.code === 'EBADF') {
-        console.log("missing config file: " + e.path);
-    } else {
-        console.log("problem reading config file (" + config.config_path + "): " + e);
-    }
-    process.exit(1);
+  if (e && e.code === 'EBADF') {
+    console.log("missing config file: " + e.path);
+  } else {
+    console.log("problem reading config file (" + config.config_path + "): " + e);
+  }
+  process.exit(1);
 }
 
 // load up databases
-db.load_databases();
+db.connect(function(err) {
+  if (err) {
+    winston.error("can't connect to database!");
+    process.nextTick(process.exit);
+  }
+  
 
-// need rooms configured, otherwise, what are we even doing?
-if (Object.keys(config.servers).length === 0) {
+  // need rooms configured, otherwise, what are we even doing?
+  if (Object.keys(config.servers).length === 0) {
     console.log("No irc rooms are configured!  Go update the config file!");
-//    process.exit(1);
-}
+    //    process.exit(1);
+  }
 
-// now connect to specified servers
-var toConnect = [];
-for (var host in config.servers) {
+  // now connect to specified servers
+  var toConnect = [];
+  for (var host in config.servers) {
     for (var i = 0; i < config.servers[host].length; i++) {
-        var room = config.servers[host][i];
-        toConnect.push([host, room]);
+      var room = config.servers[host][i];
+      toConnect.push([host, room]);
     }
-}
-function connectOneRoom() {
+  }
+  function connectOneRoom() {
     if (toConnect.length == 0) return;
     else {
-        var cur = toConnect.shift();
-        if (cur[1].substr(0,1) != '#') cur[1] = "#" + cur[1];
-        irc.listen(cur[0], cur[1], function(x) {
-            if (x !== true) {
-                console.log("error connecting to : " + cur[0] + " " + cur[1]);
-                process.exit(1);
-            }
-            connectOneRoom();
-        });
+      var cur = toConnect.shift();
+      if (cur[1].substr(0,1) != '#') cur[1] = "#" + cur[1];
+      irc.listen(cur[0], cur[1], function(x) {
+        if (x !== true) {
+          console.log("error connecting to : " + cur[0] + " " + cur[1]);
+          process.exit(1);
+        }
+        connectOneRoom();
+      });
     }
-}
-connectOneRoom();
+  }
+  connectOneRoom();
+});
