@@ -1,0 +1,46 @@
+#!/usr/bin/env node
+
+/**
+ * ircloggr - a node.js all-in-one implementation of irc logging visible via
+ *            a REST/JSON interface.
+ *
+ * See LICENSE file for licensing information.
+ */
+
+const sys = require("sys"),
+      url = require("url"),
+     path = require("path"),
+  express = require('express'),
+    wsapi = require('../lib/wsapi.js'),
+httputils = require('../lib/httputils.js'),
+   config = require('../lib/config.js'),
+       db = require('../lib/db.js'),
+  winston = require('winston');
+
+db.connect(function(err) {
+  if (err) throw err;
+
+  var app = express.createServer()
+    .use(express.favicon())
+    .use(express.logger())
+    .use(function(req, res, next) {
+      var urlpath = url.parse(req.url).pathname;
+      if (urlpath.indexOf('/api/') !== 0) return next(); 
+      urlpath = urlpath.substr(4); 
+      // break pathname up by '/'
+      var args = urlpath.substr(1).split('/');
+      if (wsapi[args[0]]) {
+        winston.debug('<' + args[0] + '> requested');
+        wsapi[args[0]](args, req, res);
+      } else {
+        winston.warn('<' + args[0] + '> requested - non existant API');
+        res.status(404);
+        res.json({ success: false, reason: "no such api: " + args[0] });
+      }
+    })
+    .use(express.static(path.join(__dirname, '..', 'static')))
+    .listen(config.port, config.host, function(err) {
+      var b = app.address();
+      winston.info('running on http://' + b.address + ':' + b.port);
+    });
+});
