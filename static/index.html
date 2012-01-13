@@ -3,22 +3,17 @@
 <head>
   <meta http-equiv="Content-type" content="text/html; charset=utf-8">
   <title>ircloggr</title>
-  <link href='http://fonts.googleapis.com/css?family=Permanent+Marker' rel='stylesheet' type='text/css'>
   <link href='css/style.css' type='text/css' rel='stylesheet'>
 </head>
 <body>
   <div id="homescreen">
-    <div class="summary"><a href="http://github.com/lloyd/ircloggr">ircloggr</a> is an open source
-      framework for archiving IRC conversations and making them available on the web.
-      This site is a public instance of that project.
+    <div class="header">
+      <div class="title">irclog.gr</div>
+      <div class="subtitle">Online IRC logs for open source projects</div>
     </div>
-    <div class="title">irclog.gr</div>
-    <div class="subtitle">Online IRC logs for open source projects</div>
     <div class="rooms">
-      <div class="iknow">I know about <span class="howmany"></span> rooms:</div>
-      <div class="roomlist">
-        Loading room logs...
-      </div>
+      <table class="roomlist">
+      </table>
     </div>
   </div>
   <div id="logview">
@@ -30,14 +25,14 @@
     </div>
     <table class="logdisplay">
     </table>
-    <div class="older button">older &gt;&gt;</div>
-    <div class="newer button">newer &lt;&lt;</div>
-
   </div>
   <div id="templates">
-    <div class="room"><div class="host"></div><div class="room"></div></div>
+    <table><tr class="room"><td class="updated"></td><td><span class="room"></span> (<span class="host"></span>)</td><td class="activity"></td></tr></table>
     <table><tr class="log"><td class="time"></td><td class="what"><span class="who"></span></td></tr></table>
+    <table><tr class="button top"><td colspan="2">^^^ <b>older</b> ^^^</td></tr></table>
+    <table><tr class="button bottom"><td colspan="2">vvv <b>older</b> vvv</td></tr></table>
   </div>
+<a href="https://github.com/lloyd/ircloggr"><img style="position: fixed; top: 0; right: 0; border: 0; z-index: 20;" src="https://d3nwyuy0nl342s.cloudfront.net/img/4c7dc970b89fd04b81c8e221ba88ff99a06c6b61/687474703a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f77686974655f6666666666662e706e67" alt="Fork me on GitHub"></a>
 </body>
 <script src="js/jquery-1.6.min.js"></script>
 <script src="js/jquery.hashchange.min.js"></script>
