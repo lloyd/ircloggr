@@ -69,8 +69,12 @@ db.connect(function(err) {
             process.stderr.write('error writing row: ' + err + "\n");
             process.stderr.write(JSON.stringify(obj, null, 4) + '\n');
           }
+          process.stdout.write('.');
           if (objs.length) add();
-          else db.close();
+          else {
+            process.stdout.write('\n');
+            db.close();
+          }
         });
       }
       add();
