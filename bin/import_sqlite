@@ -41,13 +41,11 @@ db.connect(function(err) {
     });
     
     p.on('exit', function(code, signal) {
-      var outstanding = 0;
-
       // now parse out the buffer
+      var objs = [];
       buf.split('\n').forEach(function(row) {
         if (!(row.trim().length)) return;
 
-        outstanding++;
         // peel off the timestamp
         var x = row.indexOf(',');
         var ts = new Date(parseInt(row.substr(0, x)) * 1000);
@@ -56,25 +54,26 @@ db.connect(function(err) {
         var who = row.substr(0,x);
         row = row.substr(x+1);
         var utterance = /^"?(.*?)"?$/.exec(row)[1].replace(/""/g, '"');
-        var obj = {
-          host: host,
-          room: room,
+        objs.push({
           utterance: utterance,
           date: ts,
           who: who
-        };
-
-        // add it!
-        db.logMessage(obj, function(err) {
+        });
+      });
+      
+      // add them!
+      function add() {
+        var cur = objs.splice(0, 1000);
+        db.logMessage(host, room, cur, function(err) {
           if (err) {
             process.stderr.write('error writing row: ' + err + "\n");
             process.stderr.write(JSON.stringify(obj, null, 4) + '\n');
           }
-          
-          if (--outstanding === 0) db.close();
+          if (objs.length) add();
+          else db.close();
         });
-      });
-      if (!outstanding) db.close();
+      }
+      add();
     });
   });
 });

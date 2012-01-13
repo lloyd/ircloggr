@@ -71,9 +71,7 @@ suite.addBatch({
 suite.addBatch({
   "logging utterances": {
     topic: function() {
-      db.logMessage({
-        host: "irc.freenode.net",
-        room: "#yajl",
+      db.logMessage("irc.freenode.net", "#yajl", {
         who: "lloyd",
         utterance: "I love ircloggr"
       }, this.callback);
@@ -81,9 +79,7 @@ suite.addBatch({
     "succeeds": function(err) { assert.isNull(err) },
     "and more utterances": {
       topic: function() {
-        db.logMessage({
-          host: "irc.freenode.net",
-          room: "yajl",
+        db.logMessage("irc.freenode.net", "yajl", {
           who: "lloyd",
           utterance: "he is kind and gentle"
         }, this.callback);
@@ -122,9 +118,7 @@ suite.addBatch({
       var cb = this.callback;
       var completed = 0;
       for (var i = 0; i < 200; i++) {
-        db.logMessage({
-          host: "irc.mozilla.org",
-          room: "#identity",
+        db.logMessage("irc.mozilla.org", "#identity",
           who: "lloyd",
           utterance: "This is utterance #" + i
         }, function(err, r) {
