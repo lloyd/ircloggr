@@ -86,18 +86,6 @@ $(document).ready(function() {
   function setButtons(first_id, last_id, phrase) {
     var first = parseInt($("table.logdisplay tr:first-child").attr("mid"));
     var last = parseInt($("table.logdisplay tr:last-child").attr("mid"));
-    /*
-    if (last_id === undefined || last_id == 0) $("#logview .button.older").hide();
-    else {
-      $("#logview .button.older").attr("mid", last_id+1).show();
-    }
-    if (typeof first_id === 'number') {
-      $("#logview .button.newer").attr("mid", first_id + 30);
-    } else {
-      $("#logview .button.newer").hide();
-    }
-
-    */
 
     if (last !== undefined && last !== 0) {
       var bottomButt = $("#templates .button.bottom").clone();
