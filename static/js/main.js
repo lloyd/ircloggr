@@ -121,6 +121,16 @@ $(document).ready(function() {
     });
   }
 
+  var colors = {};
+  var colorsUsed = 1;
+
+  function colorPerson(who) {
+    if (colors[who]) return colors[who];
+    if (colorsUsed >= 16) return "";     
+    colors[who] = 'clr_' + colorsUsed++;
+    return colors[who];
+  }
+
   function renderLogs(data, chrono) {
     function clickToContext() {
       var hashBits = location.hash.split("/");
@@ -133,6 +143,7 @@ $(document).ready(function() {
       l.attr("mid", data[i].id);
       l.find(".time").text($.timeago(new Date(1000 * data[i].ts)));
       l.find(".what").html(formatMessage(data[i].who, data[i].msg));
+      l.find(".who").addClass(colorPerson(data[i].who));
       l.click(clickToContext);
       if (i % 2) l.addClass("odd");
       if (chrono) l.prependTo($(".logdisplay"));
