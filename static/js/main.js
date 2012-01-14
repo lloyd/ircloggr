@@ -282,13 +282,16 @@ $(document).ready(function() {
     var elems = hash.split('/');
     if (elems[0] === "" || elems[0] === "#home") {
       mainPage();
-    } else if (elems[0] === "#browse") {
-      browse.apply(undefined, elems.slice(1));
-    } else if (elems[0] === "#show") {
-      show.apply(undefined, elems.slice(1));
-    } else if (elems[0] === "#search") {
-      search.apply(undefined, elems.slice(1));
-    }
+    } else {
+      $("#github_ribbon").fadeOut(500);
+      if (elems[0] === "#browse") {
+        browse.apply(undefined, elems.slice(1));
+      } else if (elems[0] === "#show") {
+        show.apply(undefined, elems.slice(1));
+      } else if (elems[0] === "#search") {
+        search.apply(undefined, elems.slice(1));
+      }
+    }    
   }
   $(window).hashchange(load);
   load();
