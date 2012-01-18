@@ -45,7 +45,7 @@ $(document).ready(function() {
         closeTags();
       } else if (msg.charCodeAt(i) == 0x03) {
         if (isOpen('span')) closeTags('irc');
-        
+
         // span coloring!
         var color = undefined;
         if (msg.charCodeAt(i+1) >= 0x30 &&  msg.charCodeAt(i+1) <= 0x39) {
@@ -70,16 +70,16 @@ $(document).ready(function() {
     }
     closeTags();
     msg = msgbuf;
-    
+
     // is this an action?
     if (msg.length >= 10 && msg.charCodeAt(0) == 1 && msg.charCodeAt(msg.length - 1) == 1
         & msg.substr(1,6) == "ACTION")
     {
-      return "<div class=\"action\">*<span class=\"who\">" + who + "</span>" + msg.substr(8, msg.length - 9) + "</div>";
+      return "<div class=\"action\">*<span class=\"who\">" + who + "</span><span class=\"utt\">" + msg.substr(8, msg.length - 9) + "</span></div>";
     }
     else
     {
-      return "<span class=\"who\">" + who + ":</span>" + msg;
+      return "<span class=\"who\">" + who + ":</span><span class=\"utt\">" + msg + "</span>";
     }
   }
 
@@ -122,11 +122,14 @@ $(document).ready(function() {
   }
 
   var colors = {};
-  var colorsUsed = 1;
+  var colorsUsed = 2;
 
   function colorPerson(who) {
     if (colors[who]) return colors[who];
-    if (colorsUsed >= 16) return "";     
+    // recycle
+    if (colorsUsed >= 16) colorsUsed = 2;
+    // skip yellow
+    if (colorsUsed == 8) colorsUsed++;
     colors[who] = 'clr_' + colorsUsed++;
     return colors[who];
   }
@@ -149,6 +152,17 @@ $(document).ready(function() {
       if (chrono) l.prependTo($(".logdisplay"));
       else l.appendTo($(".logdisplay"));
     }
+    // now go through and colorize people in messages
+    $(".logdisplay td.what span.utt").each(function(e) {
+      var x = $(this).html();
+      for (var i in colors) {
+        if (!colors.hasOwnProperty(i)) continue;
+        var re = new RegExp("([ ]|^)" + i + "(?=[: ,\"]|$)");
+        var rep = '$1<span class="' + colorPerson(i) + '">' + i + "</span>";
+        x = x.replace(re, rep);
+      }
+      $(this).html(x);
+    });
   }
 
   function showError(str) {
