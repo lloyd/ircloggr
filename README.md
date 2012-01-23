@@ -3,63 +3,46 @@ servers and rooms you specify in a config file, and a RESTful JSON API
 that you may use to extract and search logs.  Also bundled is a sample
 client website that can render logs.
 
-The whole damn thing is self contained (sqlite), runs in a single process,
-and is built with node.js.
-
 ## Software Prerequisites
 
-  * node.js (0.4.7 is the hotness)
-  * connect (>= 1.4.0) `npm install connect`
-  * irc (>= 0.2.0) `npm install irc`
-  * sqlite (>= 1.0.3) `npm install sqlite`
+  * node.js (0.6.x)
+  * deps listed in `package.json`
+  * a mysql database to connect to
 
 ## Testing & Development
+
+### The web server
 
 I hope you'll find ircloggr simple to hack on.  Here are the steps to get
 a local instance up and running:
 
-  1. Install node.js and prerequisites listed above
-  2. Copy `config.json.sample` to `config.json` and modify to taste
-  3. start the ircloggr server: `node server/run.js`
-  4. start the test harness: `node test/test_server.js
-  5. point your browser at http://localhost:60000/
+  1. Install node.js
+  2. git clone this repository
+  3. npm install
+  4. install mysql, create an `ircloggr` database, grant all privs to `ircloggr` user
+  5. PORT=8080 npm start
 
-The "test server" in step four is basically a tiny little web server
-that serves up the files in /static at root, and proxies requests to
-/api/* to the ircloggr [web services api](/lloyd/ircloggr/blob/master/WSAPI.md).  It
-simulates the role that nginx or another webserver/reverse proxy
-server might play during deployment.
+Visit `http://127.0.0.1:8080/` in your browser
+
+### The logger daemon
+
+  1. SERVERS=irc.freenode.net=ircloggr_test
+
+Now log into `irc.freenode.net` #ircloggr_test and notice that your utterances are
+visible through the web view.
 
 ## Deployment
 
-One way to deploy the server is behind an nginx reverse proxy.
-nginx can handle response compression, and caching (TODO).  Here's
-a sample nginx configuration
+Now that you've got it running, deployment on any provider should be pretty
+straightforward.  Here are steps to get up and running on heroku:
 
-    http {
-        include       mime.types;
+  * heroku create --stack cedar --buildpack http://github.com/hakobera/heroku-buildpack-nodejs.git // create a new app on heroku using node 0.6+
+  * heroku addons:add cleardb:ignite // add a mysql database
+  * heroku config:add IP_ADDRESS=0.0.0.0
+  * heroku config:add BOT_NAME=my_ircloggr_bot
+  * git push heroku master
 
-        gzip  on;
-        gzip_proxied any;
-        gzip_types text/html application/json application/x-javascript text/css;
+you should be running!  now let's configure a room and the daemon
 
-        server {
-            listen       80;
-            server_name  irclog.gr;
-
-            location / {
-                root   /home/http/ircloggr/static;
-                index  index.html;
-            }
-
-            location = /api/code_update {
-                internal;
-            }
-
-            location /api/ {
-                proxy_pass        http://127.0.0.1:51432/;
-                proxy_set_header  X-Real-IP  $remote_addr;
-            }
-        }
-    }
-
+  * heroku config:add SERVERS=irc.freenode.net=ircloggr_testroom
+  $ heroku scale web=1 worker=1
