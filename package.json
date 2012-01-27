@@ -8,7 +8,8 @@
     "mysql": "0.9.5",
     "vows": "0.5.13",
     "winston": "0.5.6",
-    "express": "2.5.5"
+    "express": "2.5.5",
+    "convict": "0.0.5"
   }
   , "scripts": {
     "start": "bin/ircloggr_web",

@@ -1,0 +1,30 @@
+{
+  "servers": {
+    "irc.freenode.net": [
+      "jsonselect",
+      "yajl",
+      "logstash"
+    ],
+    "irc.mozilla.org": [
+      "amo",
+      "browserid",
+      "chromeless",
+      "developers",
+      "devtools",
+      "fxhome",
+      "hackasaurus",
+      "identity",
+      "labs",
+      "media",
+      "mobile",
+      "mozilla-taiwan",
+      "openwebapps",
+      "pdfjs",
+      "planning",
+      "qa",
+      "rust",
+      "sync",
+      "testday"
+    ]
+  }
+}

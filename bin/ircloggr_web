@@ -39,7 +39,7 @@ db.connect(function(err) {
       }
     })
     .use(express.static(path.join(__dirname, '..', 'static')))
-    .listen(config.port, config.host, function(err) {
+    .listen(config.get('port'), config.get('host'), function(err) {
       var b = app.address();
       winston.info('running on http://' + b.address + ':' + b.port);
     });
