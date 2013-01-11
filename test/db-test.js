@@ -118,7 +118,7 @@ suite.addBatch({
       var cb = this.callback;
       var completed = 0;
       for (var i = 0; i < 200; i++) {
-        db.logMessage("irc.mozilla.org", "#identity",
+        db.logMessage("irc.mozilla.org", "#identity", {
           who: "lloyd",
           utterance: "This is utterance #" + i
         }, function(err, r) {

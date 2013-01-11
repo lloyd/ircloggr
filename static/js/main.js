@@ -305,7 +305,7 @@ $(document).ready(function() {
       } else if (elems[0] === "#search") {
         search.apply(undefined, elems.slice(1));
       }
-    }    
+    }
   }
   $(window).hashchange(load);
   load();
