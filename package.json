@@ -10,6 +10,9 @@
     "winston": "0.5.6",
     "express": "2.5.5"
   }
+  , "devDependencies": {
+    "awsbox": "0.3.5"
+  }
   , "scripts": {
     "start": "bin/ircloggr_web",
     "test": "node_modules/.bin/vows"
