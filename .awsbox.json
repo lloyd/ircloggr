@@ -1,6 +1,7 @@
 {
   "processes": [
-    "bin/ircloggr_web"
+    "bin/ircloggr_web",
+    "bin/ircloggr_log"
   ],
   "hooks": {
     "postcreate": "scripts/post_create.sh"
