@@ -1,5 +1,11 @@
 {
   "processes": [
     "bin/ircloggr_web"
+  ],
+  "hooks": {
+    "postcreate": "scripts/post_create.sh"
+  },
+  "packages": [
+    "mysql-server"
   ]
 }
